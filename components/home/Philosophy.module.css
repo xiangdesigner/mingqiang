@@ -1,0 +1,68 @@
+.root {
+  padding-block: calc(var(--section-y) * 1.1);
+}
+.figure {
+  grid-column: 1 / span 6;
+}
+.media {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.caption {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.caption span:first-child {
+  color: var(--bronze);
+}
+.text {
+  grid-column: 8 / span 5;
+  padding-top: clamp(3rem, 14vh, 9rem);
+}
+.motto {
+  margin-top: 2rem;
+  font-size: var(--fs-h2);
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+}
+.para {
+  margin-top: 1.5rem;
+  max-width: 26em;
+  font-size: var(--fs-small);
+  line-height: 1.95;
+  color: var(--graphite);
+}
+.creed {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: var(--hair) solid var(--line-strong);
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  letter-spacing: 0.1em;
+}
+@media (max-width: 1023px) {
+  .figure {
+    grid-column: 1 / span 10;
+  }
+  .text {
+    grid-column: 2 / span 10;
+    padding-top: 3rem;
+  }
+}
+@media (max-width: 767px) {
+  .figure,
+  .text {
+    grid-column: 1 / -1;
+  }
+}

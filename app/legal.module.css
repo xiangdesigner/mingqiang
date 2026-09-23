@@ -1,0 +1,33 @@
+.body {
+  padding-bottom: var(--section-y);
+}
+.text {
+  grid-column: 3 / span 7;
+  font-size: var(--fs-body);
+  line-height: 1.95;
+  color: var(--graphite);
+}
+.text h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  padding-top: 1rem;
+  border-top: var(--hair) solid var(--line);
+  font-size: var(--fs-h3);
+  color: var(--ink);
+}
+.note {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+}
+@media (max-width: 1023px) {
+  .text {
+    grid-column: 1 / span 10;
+  }
+}
+@media (max-width: 767px) {
+  .text {
+    grid-column: 1 / -1;
+  }
+}

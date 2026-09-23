@@ -1,0 +1,163 @@
+.root {
+  color: var(--ink);
+}
+.aside {
+  grid-column: 1 / span 4;
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  margin-top: 1.5rem;
+  font-size: var(--fs-h2);
+  letter-spacing: 0.04em;
+}
+.text {
+  margin-top: 1.25rem;
+  max-width: 28em;
+  font-size: var(--fs-small);
+  line-height: 1.9;
+  color: var(--graphite);
+}
+.detail {
+  margin-top: auto;
+  padding-top: 2.5rem;
+}
+.detailIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  color: var(--bronze);
+}
+.detailIndex span {
+  margin-left: 0.75rem;
+  color: var(--fg-muted);
+}
+.detailName {
+  margin-top: 0.5rem;
+  font-size: var(--fs-h3);
+  letter-spacing: 0.05em;
+  animation: swap var(--d-base) var(--ease-out);
+}
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.detailEn {
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.detailFn {
+  margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+.detailFields {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: var(--hair) solid var(--line);
+  font-size: var(--fs-small);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+.field {
+  grid-column: 5 / span 8;
+}
+.svg {
+  width: 100%;
+  height: auto;
+  background: var(--paper);
+}
+.parcel {
+  cursor: pointer;
+  outline: none;
+}
+.parcelShape {
+  fill: transparent;
+  stroke: rgba(15, 23, 21, 0.55);
+  stroke-width: 1.25;
+  stroke-linejoin: miter;
+  transition: fill var(--d-base) var(--ease-out), stroke var(--d-base) var(--ease-out);
+}
+.parcel:hover .parcelShape {
+  fill: rgba(15, 23, 21, 0.035);
+}
+.parcelActive .parcelShape {
+  fill: var(--ink);
+  stroke: var(--ink);
+}
+.parcel:focus-visible .parcelShape {
+  stroke: var(--blue);
+  stroke-width: 2.5;
+}
+.parcelIndex {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  fill: var(--bronze);
+  pointer-events: none;
+}
+.parcelName {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 3px;
+  fill: var(--ink);
+  pointer-events: none;
+  transition: fill var(--d-base) var(--ease-out);
+}
+.parcelActive .parcelName {
+  fill: var(--paper);
+}
+.parcelActive .parcelIndex {
+  fill: var(--bronze-light);
+}
+.caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  fill: rgba(15, 23, 21, 0.5);
+}
+@media (max-width: 1023px) {
+  /* Text, then the field, then the selected practice: reading order follows the interaction. */
+  .aside {
+    display: contents;
+  }
+  .aside > * {
+    grid-column: 1 / -1;
+  }
+  .field {
+    grid-column: 1 / -1;
+    order: 2;
+    margin-top: 2.5rem;
+  }
+  .detail {
+    order: 3;
+    margin-top: 2rem;
+    padding-top: 0;
+  }
+  .parcelName {
+    font-size: 32px;
+  }
+}
+@media (max-width: 767px) {
+  .parcelName {
+    font-size: 40px;
+  }
+  .parcelIndex {
+    font-size: 20px;
+  }
+  .caption {
+    font-size: 14px;
+  }
+}

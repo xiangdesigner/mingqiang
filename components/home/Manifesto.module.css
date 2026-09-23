@@ -1,0 +1,42 @@
+.root {
+  padding-top: calc(var(--section-y) * 1.2);
+}
+.margin {
+  grid-column: 1 / span 2;
+}
+.body {
+  grid-column: 4 / span 8;
+}
+.statement {
+  font-size: var(--fs-h1);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+.text {
+  margin-top: 1.75rem;
+  max-width: 30em;
+  font-family: var(--font-serif);
+  font-size: var(--fs-lead);
+  line-height: 1.85;
+  color: var(--graphite);
+}
+.text + .text {
+  margin-top: 1rem;
+}
+.rule {
+  margin-top: calc(var(--section-y) * 0.9);
+}
+@media (max-width: 1023px) {
+  .margin {
+    grid-column: 1 / -1;
+    margin-bottom: 2rem;
+  }
+  .body {
+    grid-column: 1 / span 11;
+  }
+}
+@media (max-width: 767px) {
+  .body {
+    grid-column: 1 / -1;
+  }
+}

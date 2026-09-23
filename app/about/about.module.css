@@ -1,0 +1,230 @@
+.intro {
+  padding-bottom: var(--section-y);
+}
+.figure {
+  grid-column: 1 / span 8;
+}
+.img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.caption {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.introText {
+  grid-column: 9 / span 4;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: var(--fs-small);
+  line-height: 1.95;
+  color: var(--graphite);
+}
+
+.founder {
+  padding-top: 0;
+}
+.founderBody {
+  padding-top: 2.5rem;
+  row-gap: 2rem;
+}
+.founderName {
+  grid-column: 1 / span 5;
+}
+.founderZh {
+  font-size: var(--fs-h1);
+  letter-spacing: 0.1em;
+}
+.founderEn {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.founderRole {
+  margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  letter-spacing: 0.06em;
+}
+.founderText {
+  grid-column: 7 / span 5;
+  font-size: var(--fs-small);
+  line-height: 1.95;
+  color: var(--graphite);
+}
+.founderNote {
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+}
+
+.groupText {
+  grid-column: 1 / span 6;
+}
+.groupTitle {
+  margin-top: 1rem;
+  font-size: var(--fs-h2);
+  letter-spacing: 0.04em;
+}
+.entities {
+  margin-top: 2.5rem;
+  border-top: var(--hair) solid var(--line);
+}
+.entities li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  grid-template-areas: "idx name" "idx en" "idx fn" "idx fields";
+  padding: 1.25rem 0;
+  border-bottom: var(--hair) solid var(--line);
+}
+.entIdx {
+  grid-area: idx;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  color: var(--bronze-light);
+  padding-top: 0.4rem;
+}
+.entName {
+  grid-area: name;
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  letter-spacing: 0.04em;
+}
+.entEn {
+  grid-area: en;
+  margin-top: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.entFn {
+  grid-area: fn;
+  margin-top: 0.6rem;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.entFields {
+  grid-area: fields;
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+}
+.groupFigure {
+  grid-column: 8 / span 5;
+  align-self: center;
+}
+.groupImg {
+  width: 100%;
+  height: auto;
+}
+.groupCaption {
+  margin-top: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+}
+
+.valuesText {
+  grid-column: 1 / span 6;
+}
+.valuesTitle {
+  margin-top: 1rem;
+  font-size: var(--fs-h2);
+  letter-spacing: 0.04em;
+}
+.valuesDesc {
+  margin-top: 1rem;
+  max-width: 28em;
+  font-size: var(--fs-small);
+  line-height: 1.9;
+  color: var(--graphite);
+}
+.valueList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 var(--col-gap);
+  margin-top: 2rem;
+  border-top: var(--hair) solid var(--line-strong);
+}
+.valueList li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-bottom: var(--hair) solid var(--line);
+}
+.valueLetter {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  color: var(--blue);
+}
+.valueZh {
+  font-family: var(--font-serif);
+  font-size: var(--fs-h3);
+  letter-spacing: 0.1em;
+}
+.logoFigure {
+  grid-column: 8 / span 4;
+  align-self: center;
+  padding: 2rem;
+  background: #fdfdfd;
+  border: var(--hair) solid var(--line);
+}
+.logoImg {
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 1023px) {
+  .figure,
+  .introText,
+  .founderName,
+  .founderText,
+  .groupText,
+  .groupFigure,
+  .valuesText,
+  .logoFigure {
+    grid-column: 1 / -1;
+  }
+  .introText {
+    margin-top: 2rem;
+  }
+  .founderText {
+    margin-top: 1rem;
+  }
+  .groupFigure {
+    margin-top: 3rem;
+  }
+  .logoFigure {
+    grid-column: 1 / span 6;
+    margin-top: 3rem;
+  }
+}
+@media (max-width: 767px) {
+  .logoFigure {
+    grid-column: 1 / -1;
+  }
+}
