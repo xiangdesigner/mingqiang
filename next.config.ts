@@ -19,9 +19,11 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["*.trycloudflare.com"],
 
   images: {
-    // No image-optimization server is available on static hosting, so
-    // next/image falls back to serving the original file directly.
-    unoptimized: true,
+    // No image-optimization server is available on static hosting.
+    // `unoptimized: true` alone leaves next/image's <img src> unprefixed
+    // by basePath (see image-loader.ts) — a custom loader fixes that.
+    loader: "custom",
+    loaderFile: "./image-loader.ts",
   },
   poweredByHeader: false,
 };
