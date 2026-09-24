@@ -1,0 +1,205 @@
+/* Shared styles for inner pages (below the page title). */
+.wrap {
+  padding-bottom: clamp(56px, 7vw, 104px);
+}
+.prose {
+  max-width: 62em;
+}
+.narrow {
+  max-width: 48em;
+}
+
+/* Numbered heading like the existing site's "01 成立緣由 (Establishment)" */
+.num {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: clamp(16px, 2vw, 26px);
+}
+.numIndex {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--brand);
+}
+.numTitle {
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.numEn {
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* Lead sentence */
+.lead {
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--brand);
+  margin-bottom: 1em;
+}
+
+/* Generic two-column media + text row */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+.rowReverse {
+  direction: rtl;
+}
+.rowReverse > * {
+  direction: ltr;
+}
+.media {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+.media img {
+  width: 100%;
+  height: auto;
+}
+
+/* Item list (title + text) */
+.items {
+  border-top: 1px solid var(--line);
+}
+.item {
+  padding: clamp(18px, 2.2vw, 28px) 0;
+  border-bottom: 1px solid var(--line);
+}
+.itemTitle {
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.itemText {
+  margin-top: 8px;
+  color: var(--text);
+}
+
+/* Back link */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(32px, 4vw, 56px);
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  color: var(--nav);
+}
+.back::before {
+  content: "←";
+}
+.back:hover {
+  color: var(--brand);
+}
+
+/* Section spacing inside inner pages */
+.block + .block {
+  margin-top: clamp(40px, 5vw, 72px);
+}
+.subheading {
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.subheading::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  margin-right: 12px;
+  vertical-align: -0.15em;
+  background: var(--brand);
+}
+
+/* Date / title list rows (courses, publications) */
+.entries {
+  border-top: 1px solid var(--line);
+}
+.entry {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 32px);
+  padding: clamp(18px, 2.2vw, 28px) 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.entryThumb {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--sand);
+}
+.entryDate {
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.entryTitle {
+  margin-top: 4px;
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  transition: color var(--d-fast) var(--ease-out);
+}
+.entry:hover .entryTitle {
+  color: var(--brand);
+}
+.entryText {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Article header (news / course detail) */
+.articleHead {
+  padding-bottom: clamp(18px, 2.4vw, 28px);
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+.articleDate {
+  font-size: 0.9375rem;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.articleTitle {
+  margin-top: 8px;
+  font-size: clamp(1.375rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+@media (max-width: 767px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .entry {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .entryThumb {
+    width: 72px;
+    height: 72px;
+  }
+}

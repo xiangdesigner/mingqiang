@@ -1,59 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Serif_TC, Noto_Sans_TC, IBM_Plex_Mono } from "next/font/google";
+import { Noto_Sans_TC } from "next/font/google";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { PageTransition } from "@/components/site/PageTransition";
-import { Cursor } from "@/components/site/Cursor";
 import { site } from "@/content/site";
 import "./globals.css";
 
-const notoSerif = Noto_Serif_TC({
-  variable: "--font-noto-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
 const notoSans = Noto_Sans_TC({
   variable: "--font-noto-sans",
   subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "700", "900"],
   display: "swap",
 });
 
 // Overridable at build time (the Pages workflow sets this to the real
-// https://<owner>.github.io/<repo> origin); content/site.ts keeps the
-// documented placeholder as its default until a production domain exists.
+// https://<owner>.github.io/<repo> origin).
 const siteUrl = process.env.SITE_URL || site.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.name}｜${site.nameEn}`,
+    default: site.seo.title,
     template: `%s｜${site.name}`,
   },
-  description:
-    "茗強地政與土管整合不動產估價、都市計畫、地政登記、不動產經紀與資產鑑定五項專業，自 2014 年起於臺中服務土地與不動產相關決策。",
+  description: site.seo.description,
+  keywords: [...site.seo.keywords],
   openGraph: {
     type: "website",
     locale: "zh_TW",
     siteName: site.name,
-    title: `${site.name}｜${site.nameEn}`,
-    description: "不動產估價、都市計畫、地政登記、不動產經紀與資產鑑定。臺中，自 2014 年起。",
-    images: [{ url: "/images/photo-entrance.png", width: 1672, height: 941, alt: "建築入口與城市景觀" }],
+    title: site.seo.title,
+    description: site.seo.description,
+    images: [{ url: "/images/brand/logo-values.png", width: 542, height: 441, alt: site.name }],
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f1ede4",
+  themeColor: "#f7f6f1",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -65,16 +51,19 @@ const organizationJsonLd = {
   name: site.name,
   alternateName: site.nameEn,
   url: siteUrl,
+  telephone: "+886-4-2202-2662",
+  faxNumber: "+886-4-2202-2737",
+  email: site.email,
   foundingDate: String(site.foundedYear),
   founder: { "@type": "Person", name: site.founder.name, alternateName: site.founder.nameEn },
-  address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: "TW" },
+  address: { "@type": "PostalAddress", streetAddress: "民權路252巷3號2樓", addressLocality: "台中市西區", addressCountry: "TW" },
   areaServed: "TW",
-  knowsAbout: ["不動產估價", "都市計畫", "地政登記", "不動產經紀", "資產鑑定", "企業價值評估"],
+  knowsAbout: ["不動產估價", "城鄉規劃", "不動產經紀", "不動產登記", "不動產稅務諮詢", "不動產理財規劃", "動產鑑價", "無形資產評價", "企業評價"],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="zh-Hant-TW" className={`${notoSerif.variable} ${notoSans.variable} ${plexMono.variable}`}>
+    <html lang="zh-Hant-TW" className={notoSans.variable}>
       <body>
         <a href="#main" className="skip-link">
           跳至主要內容
@@ -85,7 +74,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
         </PageTransition>
         <SmoothScroll />
-        <Cursor />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
     </html>

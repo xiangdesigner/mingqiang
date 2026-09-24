@@ -1,64 +1,65 @@
 import type { Metadata } from "next";
-import { PageHead } from "@/components/ui/PageHead";
+import Image from "next/image";
+import { PageTitle } from "@/components/ui/PageTitle";
 import { InquiryForm } from "@/components/contact/InquiryForm";
 import { site } from "@/content/site";
-import { practices } from "@/content/practices";
+import { contactInfo } from "@/content/about";
+import inner from "../inner.module.css";
 import styles from "./contact.module.css";
 
 export const metadata: Metadata = {
-  title: "聯絡",
-  description: "向茗強地政與土管提出不動產估價、都市計畫、地政登記、不動產經紀或資產鑑定的專業諮詢。",
+  title: "聯絡我們",
+  description: `${site.address}　電話 ${site.phone}`,
   alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
   return (
     <>
-      <PageHead kicker="聯絡" en="Contact" title="說明您的問題。" lead="請描述您面對的土地或不動產情況，並選擇最接近的專業類別。我們會由對應的單位回覆。" />
-
-      <section className={`container ${styles.body}`}>
-        <div className="grid">
-          <aside className={styles.aside}>
+      <PageTitle title="聯絡我們" />
+      <section className={`container ${inner.wrap}`}>
+        <div className={styles.top}>
+          <a href={site.mapUrl} target="_blank" rel="noopener noreferrer" className={styles.map} aria-label="在 Google 地圖中開啟本公司及事務所位置">
+            <Image src={contactInfo.map.src} alt={contactInfo.map.alt} width={contactInfo.map.width} height={contactInfo.map.height} sizes="(min-width: 1024px) 50vw, 100vw" />
+          </a>
+          <div className={styles.info}>
             <dl className={styles.facts}>
               <div>
-                <dt>所在</dt>
+                <dt>服務地址</dt>
+                <dd>{site.address}</dd>
+              </div>
+              <div>
+                <dt>服務電話</dt>
                 <dd>
-                  {site.city}
-                  <span className={styles.en}>{site.cityEn}</span>
+                  <a href={site.phoneHref}>{site.phone}</a>
                 </dd>
               </div>
               <div>
-                <dt>地址</dt>
-                <dd>{site.address || <span className={styles.pending}>資訊補充中</span>}</dd>
+                <dt>傳真電話</dt>
+                <dd>{site.fax}</dd>
               </div>
               <div>
-                <dt>電話</dt>
-                <dd>{site.phone ? <a href={`tel:${site.phone}`} className="link link-quiet">{site.phone}</a> : <span className={styles.pending}>資訊補充中</span>}</dd>
-              </div>
-              <div>
-                <dt>電子郵件</dt>
-                <dd>{site.email ? <a href={`mailto:${site.email}`} className="link link-quiet">{site.email}</a> : <span className={styles.pending}>資訊補充中</span>}</dd>
-              </div>
-              <div>
-                <dt>服務時間</dt>
-                <dd>{site.hours || <span className={styles.pending}>資訊補充中</span>}</dd>
+                <dt>Email</dt>
+                <dd>
+                  <a href={`mailto:${site.email}`}>{site.email}</a>
+                </dd>
               </div>
             </dl>
-
-            <p className="label">組成單位</p>
-            <ol className={styles.units}>
-              {practices.map((p) => (
-                <li key={p.id}>
-                  <span className={styles.unitIdx}>{p.index}</span>
-                  <span>{p.name}</span>
+            <h2 className={inner.subheading}>{contactInfo.parking.title}</h2>
+            <p className={styles.parkingText}>{contactInfo.parking.text}</p>
+            <ul className={styles.lots}>
+              {contactInfo.parking.lots.map((l) => (
+                <li key={l.name}>
+                  <strong>{l.name}</strong>
+                  {l.text}
                 </li>
               ))}
-            </ol>
-          </aside>
-
-          <div className={styles.form}>
-            <InquiryForm />
+            </ul>
           </div>
+        </div>
+
+        <div className={styles.form}>
+          <InquiryForm />
         </div>
       </section>
     </>

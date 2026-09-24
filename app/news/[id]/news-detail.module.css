@@ -1,0 +1,63 @@
+.body p {
+  line-height: 2;
+}
+.h {
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-top: 1.6em;
+}
+.figure img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 1.2em;
+}
+.gallery li img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.agendaWrap {
+  overflow-x: auto;
+  margin-top: 1.2em;
+}
+.agenda {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.agenda th,
+.agenda td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--line);
+}
+.agenda th {
+  background: var(--sand);
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.agenda td:first-child {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 599px) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,68 +1,73 @@
-.body {
-  padding-bottom: var(--section-y);
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
 }
-.aside {
-  grid-column: 1 / span 4;
+.map {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line);
+}
+.map img {
+  width: 100%;
+  height: auto;
+  transition: transform 900ms var(--ease-out);
+}
+.map:hover img {
+  transform: scale(1.02);
 }
 .facts {
   display: flex;
   flex-direction: column;
-  border-top: var(--hair) solid var(--line-strong);
-  margin-bottom: 3rem;
+  border-top: 1px solid var(--line-strong);
+  margin-bottom: clamp(22px, 2.6vw, 34px);
 }
 .facts > div {
   display: grid;
-  grid-template-columns: 5rem 1fr;
-  gap: 1rem;
-  padding: 0.9rem 0;
-  border-bottom: var(--hair) solid var(--line);
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
 }
 .facts dt {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: var(--track-label);
-  color: var(--fg-muted);
-  padding-top: 0.3rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  padding-top: 2px;
 }
 .facts dd {
-  font-size: var(--fs-small);
+  color: var(--ink);
+}
+.facts a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.parkingText {
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.lots {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  font-size: 0.9375rem;
+  color: var(--text);
 }
-.en {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-.pending {
-  color: var(--fg-faint);
-}
-.units {
-  margin-top: 0.75rem;
-  font-size: var(--fs-small);
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.unitIdx {
-  display: inline-block;
-  width: 2.25rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: var(--track-label);
-  color: var(--bronze);
+.lots strong {
+  color: var(--ink);
+  margin-right: 4px;
 }
 .form {
-  grid-column: 6 / span 7;
+  margin-top: clamp(40px, 5vw, 72px);
+  padding-top: clamp(32px, 4vw, 56px);
+  border-top: 1px solid var(--line-strong);
 }
 @media (max-width: 1023px) {
-  .aside,
-  .form {
-    grid-column: 1 / -1;
-  }
-  .form {
-    margin-top: 3rem;
+  .top {
+    grid-template-columns: 1fr;
   }
 }

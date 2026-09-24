@@ -1,0 +1,18 @@
+.positions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(18px, 2.2vw, 28px) clamp(18px, 2.4vw, 32px);
+  background: var(--card);
+  border-left: 4px solid #b33b2b;
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  font-weight: 700;
+  color: #b33b2b;
+  letter-spacing: 0.04em;
+}
+.text {
+  margin-top: clamp(20px, 2.6vw, 32px);
+  line-height: 2;
+  color: var(--text);
+}

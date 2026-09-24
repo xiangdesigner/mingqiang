@@ -1,12 +1,13 @@
-import { PageHead } from "@/components/ui/PageHead";
+import { PageTitle } from "@/components/ui/PageTitle";
 import { TransitionLink } from "@/components/site/TransitionLink";
+import inner from "./inner.module.css";
 
 export default function NotFound() {
   return (
     <>
-      <PageHead kicker="404" en="Not found" title="這個位置沒有登記。" lead="您要找的頁面不存在，或已經移動。" />
-      <section className="container" style={{ paddingBottom: "var(--section-y)" }}>
-        <TransitionLink href="/" className="action">
+      <PageTitle title="找不到頁面" subtitle="您要找的頁面不存在，或已經移動。" />
+      <section className={`container ${inner.wrap}`}>
+        <TransitionLink href="/" className="pill pill-arrow">
           回到首頁
         </TransitionLink>
       </section>

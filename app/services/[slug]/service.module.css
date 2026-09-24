@@ -1,0 +1,207 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+}
+.main {
+  min-width: 0;
+}
+.blocks > * + * {
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.ext {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  word-break: break-all;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.6vw, 36px);
+}
+.group {
+  padding: clamp(22px, 2.8vw, 40px);
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: 0 10px 26px -18px rgba(20, 40, 48, 0.25);
+}
+.group:nth-child(2) {
+  background: var(--navy);
+  color: #fff;
+}
+.group:nth-child(2) .tags li {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+.group:nth-child(2) :global(h2),
+.group:nth-child(2) span {
+  color: #fff !important;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tags li {
+  padding: 8px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.numbered {
+  border-top: 1px solid var(--line);
+}
+.numbered li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+  padding: clamp(16px, 2vw, 24px) 0;
+  border-bottom: 1px solid var(--line);
+}
+.n {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 24px);
+  counter-reset: step;
+}
+.steps li {
+  position: relative;
+  padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2vw, 26px);
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: 0 10px 26px -18px rgba(20, 40, 48, 0.25);
+}
+.steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: calc(-1 * clamp(14px, 1.8vw, 24px) / 2 - 6px);
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid var(--pill-border);
+  border-right: 2px solid var(--pill-border);
+  transform: translateY(-50%) rotate(45deg);
+}
+.stepNo {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand);
+}
+.stepTitle {
+  margin-top: 14px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.stepText {
+  margin-top: 10px;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.aside {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.asideTitle {
+  font-size: 0.8125rem;
+  letter-spacing: 0.24em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.aside ul {
+  width: 100%;
+  margin-bottom: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+.aside li {
+  border-bottom: 1px solid var(--line);
+}
+.asideLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 2px;
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  color: var(--nav);
+  transition: color var(--d-fast) var(--ease-out);
+}
+.asideLink:hover,
+.asideActive {
+  color: var(--brand);
+  font-weight: 700;
+}
+.asideIcon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--circle);
+  --icon: #1d3a5c;
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(40px, 5vw, 72px);
+  padding-top: 24px;
+  border-top: 1px solid var(--line-strong);
+}
+.pagerLink {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.pagerLink:last-child {
+  text-align: right;
+}
+.pagerLink:hover {
+  color: var(--brand);
+}
+
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .aside {
+    position: static;
+  }
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .steps li:not(:last-child)::after {
+    display: none;
+  }
+}
+@media (max-width: 639px) {
+  .groups,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}

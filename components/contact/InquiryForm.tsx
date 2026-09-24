@@ -1,74 +1,57 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { expertise } from "@/content/expertise";
 import { site } from "@/content/site";
 import styles from "./InquiryForm.module.css";
 
 type Status = "idle" | "submitting" | "success" | "error";
-type Errors = Partial<Record<"name" | "contact" | "message" | "field", string>>;
+type Errors = Partial<Record<"email" | "message", string>>;
+
+const KINDS = ["抱怨", "問題", "建議", "稱讚"] as const;
+const AREAS = ["設計", "服務", "其他"] as const;
 
 /**
- * Qualified inquiry form. Validates on the client, then posts to
- * NEXT_PUBLIC_INQUIRY_ENDPOINT if one is configured at build time.
+ * 聯絡我們 form — the same fields as the existing site (trans.php):
+ * 意見種類、意見方面、意見內容、姓名、電子郵件、電話、傳真、請儘快與我聯絡.
  *
- * This site can be built either for a Node-capable host (with the
- * app/api/inquiry route handling submissions server-side) or for static
- * hosting such as GitHub Pages, which cannot run any server code at all.
- * When no endpoint is configured — the static-hosting case — the form
- * skips the network call entirely and shows the same honest message it
- * would show if a real backend were unreachable, with phone/email as the
- * fallback.
+ * Submissions post to NEXT_PUBLIC_INQUIRY_ENDPOINT when configured at build
+ * time. On static hosting (GitHub Pages) no endpoint exists, so the form
+ * says so plainly and offers phone / email instead of pretending it sent.
+ * (The existing site's image captcha is a server feature and is not
+ * reproducible on static hosting.)
  */
 export function InquiryForm() {
   const id = useId();
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
   const [serverMessage, setServerMessage] = useState("");
-
-  const validate = (data: FormData): Errors => {
-    const e: Errors = {};
-    const name = String(data.get("name") ?? "").trim();
-    const contact = String(data.get("contact") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
-    const field = String(data.get("field") ?? "");
-    if (!name) e.name = "請填寫姓名或單位名稱。";
-    if (!contact) e.contact = "請填寫電話或電子郵件，以便回覆。";
-    else if (!/^(\+?[\d\s\-()]{7,}|[^\s@]+@[^\s@]+\.[^\s@]+)$/.test(contact)) e.contact = "格式看起來不正確，請確認電話或電子郵件。";
-    if (!field) e.field = "請選擇最接近的專業類別。";
-    if (message.length < 10) e.message = "請至少以一句話說明您的情況（10 字以上）。";
-    return e;
-  };
+  const [area, setArea] = useState<string>(AREAS[0]);
 
   const onSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     const form = ev.currentTarget;
     const data = new FormData(form);
-    const e = validate(data);
+    const e: Errors = {};
+    const email = String(data.get("email") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+    if (!email) e.email = "請輸入電子信箱。";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "電子信箱格式看起來不正確。";
+    if (!message) e.message = "請輸入您的意見。";
     setErrors(e);
     if (Object.keys(e).length) {
-      const first = Object.keys(e)[0];
-      form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      form.querySelector<HTMLElement>(`[name="${Object.keys(e)[0]}"]`)?.focus();
       return;
     }
     setStatus("submitting");
     setServerMessage("");
-
     const endpoint = process.env.NEXT_PUBLIC_INQUIRY_ENDPOINT;
     if (!endpoint) {
-      // Static hosting (e.g. GitHub Pages): no server is available to
-      // receive this. Say so plainly rather than pretending it sent.
       setStatus("error");
-      setServerMessage("此為靜態展示網站，線上表單尚未啟用，請以電話或電子郵件聯絡。");
+      setServerMessage("線上表單尚未啟用，請以電話或電子郵件與我們聯絡。");
       return;
     }
-
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(data.entries())),
-      });
+      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(data.entries())) });
       const json = (await res.json().catch(() => ({}))) as { message?: string };
       if (res.ok) {
         setStatus("success");
@@ -86,104 +69,101 @@ export function InquiryForm() {
   if (status === "success") {
     return (
       <div className={styles.success} role="status">
-        <p className="label">已收到</p>
-        <p className={styles.successTitle}>謝謝您的說明。</p>
-        <p className={styles.successText}>我們會由對應的專業單位以您留下的聯絡方式回覆。</p>
-        <button type="button" className="action" onClick={() => setStatus("idle")}>
-          再送出一則
+        <p className={styles.successTitle}>已收到您的意見，謝謝。</p>
+        <p className={styles.successText}>我們會盡快以您留下的聯絡方式回覆。</p>
+        <button type="button" className="pill pill-sm" onClick={() => setStatus("idle")}>
+          再填寫一則
         </button>
       </div>
     );
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate aria-describedby={`${id}-intro`}>
-      <p id={`${id}-intro`} className={styles.intro}>
-        欄位標示 * 為必填。表單內容僅用於回覆您的諮詢。
-      </p>
-
-      <div className={styles.row}>
-        <label htmlFor={`${id}-name`} className={styles.label}>
-          姓名或單位 *
-        </label>
-        <input id={`${id}-name`} name="name" type="text" autoComplete="name" className={styles.input} aria-invalid={!!errors.name} aria-describedby={errors.name ? `${id}-name-err` : undefined} />
-        {errors.name ? (
-          <p id={`${id}-name-err`} className={styles.error}>
-            {errors.name}
-          </p>
-        ) : null}
-      </div>
-
-      <div className={styles.row}>
-        <label htmlFor={`${id}-contact`} className={styles.label}>
-          電話或電子郵件 *
-        </label>
-        <input id={`${id}-contact`} name="contact" type="text" inputMode="email" autoComplete="email" className={styles.input} aria-invalid={!!errors.contact} aria-describedby={errors.contact ? `${id}-contact-err` : undefined} />
-        {errors.contact ? (
-          <p id={`${id}-contact-err`} className={styles.error}>
-            {errors.contact}
-          </p>
-        ) : null}
-      </div>
-
-      <fieldset className={styles.fieldset} aria-describedby={errors.field ? `${id}-field-err` : undefined}>
-        <legend className={styles.label}>專業類別 *</legend>
-        <div className={styles.options}>
-          {expertise.map((e) => (
-            <label key={e.slug} className={styles.option}>
-              <input type="radio" name="field" value={e.slug} />
-              <span className={styles.optionIdx}>{e.index}</span>
-              <span>{e.name}</span>
+    <form className={styles.form} onSubmit={onSubmit} noValidate>
+      <fieldset className={styles.box}>
+        <legend className={styles.boxTitle}>你想給我們哪種意見？</legend>
+        <div className={styles.choices}>
+          {KINDS.map((k) => (
+            <label key={k} className={styles.choice}>
+              <input type="radio" name="kind" value={k} />
+              <span>{k}</span>
             </label>
           ))}
-          <label className={styles.option}>
-            <input type="radio" name="field" value="unsure" />
-            <span className={styles.optionIdx}>—</span>
-            <span>不確定，請協助判斷</span>
-          </label>
         </div>
-        {errors.field ? (
-          <p id={`${id}-field-err`} className={styles.error}>
-            {errors.field}
-          </p>
-        ) : null}
       </fieldset>
 
-      <div className={styles.row}>
-        <label htmlFor={`${id}-location`} className={styles.label}>
-          標的所在地（選填）
-        </label>
-        <input id={`${id}-location`} name="location" type="text" className={styles.input} placeholder="例如：臺中市西屯區" />
-      </div>
+      <fieldset className={styles.box}>
+        <legend className={styles.boxTitle}>你想給我們那方面的意見？</legend>
+        <div className={styles.inline}>
+          <select name="area" value={area} onChange={(e) => setArea(e.target.value)} className={styles.select} aria-label="意見方面">
+            {AREAS.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
+          {area === "其他" ? (
+            <div className={styles.field}>
+              <label htmlFor={`${id}-other`}>其他</label>
+              <input id={`${id}-other`} name="areaOther" type="text" className={styles.input} />
+            </div>
+          ) : null}
+        </div>
+        <div className={styles.field}>
+          <label htmlFor={`${id}-message`}>請輸入意見？</label>
+          <textarea id={`${id}-message`} name="message" rows={6} className={styles.textarea} aria-invalid={!!errors.message} aria-describedby={errors.message ? `${id}-message-err` : undefined} />
+          {errors.message ? (
+            <p id={`${id}-message-err`} className={styles.error}>
+              {errors.message}
+            </p>
+          ) : null}
+        </div>
+      </fieldset>
 
-      <div className={styles.row}>
-        <label htmlFor={`${id}-message`} className={styles.label}>
-          情況說明 *
-        </label>
-        <textarea id={`${id}-message`} name="message" rows={6} className={styles.textarea} aria-invalid={!!errors.message} aria-describedby={errors.message ? `${id}-message-err` : undefined} />
-        {errors.message ? (
-          <p id={`${id}-message-err`} className={styles.error}>
-            {errors.message}
-          </p>
-        ) : null}
-      </div>
-
-      <div className={styles.foot}>
-        <button type="submit" className="action action-primary" disabled={status === "submitting"} aria-busy={status === "submitting"}>
-          {status === "submitting" ? "送出中" : "送出諮詢"}
-        </button>
-        {status === "error" ? (
-          <p className={styles.serverError} role="alert">
-            {serverMessage}
-            {site.email ? (
-              <>
-                {" "}
-                您也可以直接來信 <a href={`mailto:${site.email}`} className="link">{site.email}</a>。
-              </>
+      <fieldset className={styles.box}>
+        <legend className={styles.boxTitle}>請告訴我們如何與您取得聯絡？</legend>
+        <div className={styles.grid}>
+          <div className={styles.field}>
+            <label htmlFor={`${id}-name`}>姓名</label>
+            <input id={`${id}-name`} name="name" type="text" autoComplete="name" className={styles.input} />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor={`${id}-email`}>電子郵件 *</label>
+            <input id={`${id}-email`} name="email" type="email" autoComplete="email" placeholder="請輸入電子信箱" required className={styles.input} aria-invalid={!!errors.email} aria-describedby={errors.email ? `${id}-email-err` : undefined} />
+            {errors.email ? (
+              <p id={`${id}-email-err`} className={styles.error}>
+                {errors.email}
+              </p>
             ) : null}
-          </p>
-        ) : null}
+          </div>
+          <div className={styles.field}>
+            <label htmlFor={`${id}-phone`}>電話</label>
+            <input id={`${id}-phone`} name="phone" type="tel" autoComplete="tel" className={styles.input} />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor={`${id}-fax`}>傳真</label>
+            <input id={`${id}-fax`} name="fax" type="text" className={styles.input} />
+          </div>
+        </div>
+        <label className={`${styles.choice} ${styles.urgent}`}>
+          <input type="checkbox" name="urgent" value="請儘快與我聯絡" />
+          <span>請儘快與我聯絡</span>
+        </label>
+      </fieldset>
+
+      <div className={styles.actions}>
+        <button type="reset" className="pill" onClick={() => setErrors({})}>
+          重新填寫
+        </button>
+        <button type="submit" className="pill pill-solid" disabled={status === "submitting"} aria-busy={status === "submitting"}>
+          {status === "submitting" ? "送出中" : "確定送出"}
+        </button>
       </div>
+      {status === "error" ? (
+        <p className={styles.serverError} role="alert">
+          {serverMessage} 電話 <a href={site.phoneHref}>{site.phone}</a>，電子郵件 <a href={`mailto:${site.email}`}>{site.email}</a>。
+        </p>
+      ) : null}
     </form>
   );
 }

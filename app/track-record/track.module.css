@@ -1,0 +1,42 @@
+.intro {
+  margin-bottom: clamp(20px, 2.6vw, 36px);
+  color: var(--text);
+}
+.tableWrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.table th,
+.table td {
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--line);
+}
+.table th {
+  background: var(--sand);
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.table td:last-child {
+  white-space: nowrap;
+  color: var(--muted);
+}
+.table tbody tr:nth-child(even) td {
+  background: rgba(20, 40, 48, 0.02);
+}
+.prose {
+  max-width: 62em;
+}
+@media (max-width: 767px) {
+  .table td:last-child {
+    white-space: normal;
+  }
+}

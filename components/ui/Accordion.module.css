@@ -1,0 +1,65 @@
+.root {
+  border-top: 1px solid var(--line-strong);
+}
+.item {
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+.h {
+  font-size: inherit;
+  font-weight: inherit;
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: clamp(16px, 1.8vw, 22px) 4px;
+  text-align: left;
+  font-size: clamp(1rem, 1.35vw, 1.1875rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  transition: color var(--d-fast) var(--ease-out);
+}
+.trigger:hover {
+  color: var(--brand);
+}
+.plus {
+  position: relative;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--pill-border);
+  border-radius: 50%;
+}
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform var(--d-base) var(--ease-out);
+}
+.plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.open .plus::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.open .plus {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.panel[hidden] {
+  display: none;
+}
+.panelInner {
+  padding: 4px 4px clamp(20px, 2.4vw, 32px);
+}

@@ -3,10 +3,10 @@
 # Project notes
 
 - Dev server: `npm run dev -- --port 3100` (port 3000 is occupied on this machine).
-- All facts and copy live in `content/*.ts`. Never invent contact details, metrics, case studies, bios, or article metadata; empty fields render as 「資訊補充中」.
-- Design system is in `app/globals.css` (tokens) plus CSS Modules per component. No utility framework. Square geometry, hairlines, paper/ink surfaces, bronze markers, logo blue for interaction.
-- Pinned GSAP chapters (`Opening`, `LandField`, `ExpertiseSequence`) must create/kill triggers in `useLayoutEffect` and carry `refreshPriority` (3, 2, 1) so refresh order matches document order. Pin at `headerOffset()`, not `top top`.
-- `LandField` is the only WebGL. Keep DPR capped at 1.5, pause when off-screen, dispose on unmount, keep the SVG fallback intentional.
-- Reduced motion must keep every chapter readable: no pins, no Lenis, static land field.
-- Screenshot review: Playwright is installed as a dev dependency; the scratchpad `shot.mjs` pattern (viewport + scroll position) is the quickest way to check a chapter.
-- Deployed to GitHub Pages (static export): `next.config.ts` has `output: "export"` and `images.unoptimized: true` permanently, not conditionally. There is no `app/api/*` — GitHub Pages cannot run server code. Any new route must be a plain page (or a `force-static` metadata route like `sitemap.ts`/`robots.ts`); a server-dependent Route Handler will break `npm run build`. See README's Deployment/Inquiry form sections before adding a server feature or moving to a Node host.
+- Design source of truth: the Figma handoff board (茗強官網｜Dev Handoff). Content source of truth: the existing site https://www.594mcreaf594.com/ — all pages, navigation items, links and text follow it; the mockup is visual reference only. Copy that exists only in the mockup lives in `content/site.ts` under `mockup` and is flagged for client confirmation.
+- All facts and copy live in `content/*.ts`. `content/track.ts` and `content/courses.ts` are generated from the live site (scratchpad `gen-content.mjs`); don't hand-edit row text.
+- Design system is in `app/globals.css` (tokens sampled from the mockup) plus CSS Modules per component. No utility framework. Noto Sans TC only. Light paper surfaces, navy `#142830` for footer/tabs, logo blue `#1e4f8e` for interaction, beige circles for service icons, pill buttons, thin `#e4e3e1` rules.
+- Homepage sections: `HeroBanner` (carousel-ready; dots appear only with >1 slide), `NewsSection`, `ServicesSection`, `AcademySection` (tabs). Inner pages start with `PageTitle` directly below the header — no banner on inner pages (Figma rule).
+- Header navigation mirrors the existing site's menu (with 服務項目 / 茗強學院 dropdowns) plus a client-side `SearchOverlay` over the site's own content.
+- Deployed to GitHub Pages (static export): `next.config.ts` has `output: "export"` and a custom image loader for basePath. There is no `app/api/*` — GitHub Pages cannot run server code. Any new route must be a plain page (or a `force-static` metadata route). See README's Deployment/Inquiry form sections.
+- Screenshot review: Playwright is a dev dependency; the scratchpad `shot.mjs` pattern (viewport + scroll position) is the quickest way to check a section against the mockup crops in `scratchpad/z-*.png`.

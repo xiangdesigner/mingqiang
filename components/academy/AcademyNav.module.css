@@ -1,0 +1,40 @@
+.root {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #d9dad8;
+  margin-bottom: clamp(28px, 3.6vw, 52px);
+}
+.link {
+  display: grid;
+  place-items: center;
+  min-height: 52px;
+  padding: 0 10px;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #2a3b4f;
+  border-right: 1px solid #d9dad8;
+  transition: background-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+}
+.link:last-child {
+  border-right: 0;
+}
+.link:hover {
+  background: rgba(20, 40, 48, 0.05);
+}
+.active,
+.active:hover {
+  background: var(--navy);
+  color: #fff;
+}
+@media (max-width: 639px) {
+  .root {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .link:nth-child(2) {
+    border-right: 0;
+  }
+  .link:nth-child(-n + 2) {
+    border-bottom: 1px solid #d9dad8;
+  }
+}

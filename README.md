@@ -1,14 +1,13 @@
 # 茗強地政與土管 — Ming Chiang Land Economics & Land Management
 
-An editorial, land-intelligence brand experience for 茗強地政與土管: five professional practices and an academy under one identity, based in Taichung since 2014.
+Redesign of the existing 茗強地政與土管 website, implemented from the Figma handoff board (茗強官網｜Dev Handoff). The mockup is the visual source of truth; the existing site (https://www.594mcreaf594.com/) is the source of truth for all pages, navigation, links and text.
 
 ## Stack
 
 - Next.js 16 (App Router, Turbopack), React 19, TypeScript
 - CSS custom properties + CSS Modules (no utility framework)
-- GSAP + ScrollTrigger for pinned chapters, Lenis for smooth scrolling
-- Three.js for one WebGL moment (the land field)
-- Fonts: Noto Serif TC, Noto Sans TC, IBM Plex Mono via `next/font`
+- GSAP for the page transition, Lenis for smooth scrolling (both off under `prefers-reduced-motion`)
+- Font: Noto Sans TC via `next/font`
 
 ## Run
 
@@ -18,84 +17,88 @@ npm run dev -- --port 3100   # http://localhost:3100
 npm run build                # static export to out/ — see Deployment below
 ```
 
-## Deployment
+## What the design specifies
 
-This repo is configured for **GitHub Pages** via `.github/workflows/deploy.yml`: on every push to `main`, it runs `npm run build` and publishes the `out/` folder. GitHub Pages is static-only hosting — no Node server, no API routes, no on-demand image optimization — so `next.config.ts` sets `output: "export"` and `images.unoptimized: true` permanently, not just for this deployment target.
+From the Figma board's notes (all applied):
 
-One-time setup after the first push: in the repo's **Settings → Pages**, set **Source** to **GitHub Actions** (the workflow will then run automatically; the Pages UI shows the live URL once it completes).
-
-The workflow computes two build-time values from the repo itself, so nothing needs to be hardcoded:
-
-- `PAGES_BASE_PATH=/<repo-name>` — the site is served at `https://<owner>.github.io/<repo-name>/`, not the domain root, so every internal link and asset needs that prefix. `next.config.ts` reads it into `basePath`/`assetPrefix`.
-- `SITE_URL=https://<owner>.github.io/<repo-name>` — used for canonical links, Open Graph, and the sitemap in place of the placeholder in `content/site.ts` (see **Before launch**).
-
-Locally, both are unset, so `npm run dev`/`npm run build` behave normally at the domain root.
-
-**Moving to a real Node host later** (Vercel, a VPS, etc.) needs two reversions: drop `output: "export"` (and `images.unoptimized`, if you want on-demand optimization back) from `next.config.ts`, and restore a `POST /api/inquiry` route handler — see **Inquiry form** below, since GitHub Pages can't run it at all.
-
-**Trade-off to know:** with `images.unoptimized: true`, `next/image` serves each photo at its original file size instead of a resized/AVIF variant per viewport. Fine for a preview; worth revisiting on a Node host.
-
-## Inquiry form
-
-The form validates client-side, then posts to `NEXT_PUBLIC_INQUIRY_ENDPOINT` if one is set at build time. On GitHub Pages that variable is intentionally unset — there's no server to send it to — so the form skips the network call and tells the visitor the same thing an unreachable backend would: submission isn't available yet, use phone or email.
-
-To make it actually deliver messages, you need a Node-capable host (Vercel, Netlify, a VPS — not GitHub Pages) and a two-part setup:
-
-1. Restore a route handler at `app/api/inquiry/route.ts` that validates the payload and forwards it to `INQUIRY_WEBHOOK_URL` (any JSON intake: email relay, CRM, Zapier).
-2. Set `NEXT_PUBLIC_INQUIRY_ENDPOINT=/api/inquiry` (or an absolute URL to a separately hosted endpoint) at build time so the form knows where to send it.
-
-```
-INQUIRY_WEBHOOK_URL=https://example.com/intake
-NEXT_PUBLIC_INQUIRY_ENDPOINT=/api/inquiry
-```
+- **Homepage only keeps the hero banner.** Inner pages start with the page title directly below the shared header, with consistent top spacing (`components/ui/PageTitle`).
+- **Hero copy is real text**, not a baked-in image: kicker, two-line headline, description, top-right tagline, and the small English label. The background is the supplied text-free image. The hero is carousel-ready — dots and auto-advance appear once more than one slide exists in `components/home/HeroBanner.tsx`.
+- **Service cards keep a photo strip at the bottom; the Academy section keeps the large image on the left.**
+- **Nothing was removed because the mockup omits it.** The header menu mirrors the existing site exactly, including the 服務項目 / 茗強學院 dropdowns, and every existing page has a route (see Routes).
 
 ## Content
 
-All copy and facts live in `content/`:
+Everything textual lives in `content/`. Text was transcribed from the live site; nothing was invented.
 
-| File | Holds |
-| --- | --- |
-| `content/site.ts` | name, founder, founding year, city, contact fields, motto, creed, navigation |
-| `content/practices.ts` | the five entities and their parcel geometry on the structure map |
-| `content/expertise.ts` | the six disciplines, scope lists, illustration mapping |
-| `content/academy.ts` | Academy sections; `articles` is empty until real publications exist |
+| File | Holds | Source |
+| --- | --- | --- |
+| `content/site.ts` | name, address, phone, fax, email, LINE, copyright, navigation; `mockup` = copy that exists only in the Figma mockup | existing site + mockup |
+| `content/news.ts` | the four 最新消息 items with full detail bodies and forum photo galleries | existing site |
+| `content/services.ts` | six services: names, card taglines (mockup), full page bodies | existing site + mockup |
+| `content/about.ts` | 關於我們 sections 01–06 (incl. the timeline transcribed from the old graphic), founder CV, 人才招募, contact parking info | existing site |
+| `content/academy.ts` | 學院簡介 text, 電子刊物 placeholders (as on the existing site), 20 相關連結 with descriptions | existing site |
+| `content/track.ts` | 服務實績: 16 accordion items, ~260 table rows | generated from the live page |
+| `content/courses.ts` | 茗強課程: 55 entries with dates, blurbs and their original Google Drive links | generated from the live pages |
 
-Fields left as empty strings in `site.ts` (address, phone, email, hours) render as 「資訊補充中」 rather than invented data. Fill them in and the footer, contact anchor, and contact page update automatically.
+### Items flagged for the client (per the Figma note "請先標註給我")
+
+- **Mockup-only copy** in `content/site.ts → mockup`: hero kicker/tagline/label, the three section subtitles, the Academy overlay lines, footer slogan/blurb/lead, and the six service-card taglines in `content/services.ts`. These were transcribed from the mockup image and should be confirmed or replaced.
+- **Service-card photos**: 城鄉規劃 uses the existing site's aerial photo; the other five cards use placeholder photography because the existing site has no suitable images at usable resolution (`services/appraisal.webp`, `asset.webp`, `financial.webp`, `process.webp`, `brokerage.webp`). Swap files in `public/images/services/` when real photos arrive.
+- **Footer address**: the mockup shows a different (Taiwan Blvd) address; the site uses the existing site's address (民權路). Confirm which is current.
+- **Search**: the mockup's header shows a search icon. Implemented as a client-side search over the site's own pages, services, news, courses and links (`components/site/SearchOverlay.tsx`).
+- **Contact form captcha**: the existing site's image captcha is a server feature and can't run on static hosting; see Inquiry form below.
+
+## Routes
+
+```
+/                         首頁
+/about                    關於茗強
+/news, /news/[id]         最新消息 (4 items)
+/track-record             服務實績 (accordion; deep-linkable via #item-NN)
+/services, /services/[slug]   不動產估價 · 城鄉規劃 · 仲介＆代書業務 · 資產評估 · 不動產理財規劃 · 估價委任流程
+/academy                  學院簡介
+/academy/courses, /academy/courses/[id]        茗強課程 (55)
+/academy/publications, /academy/publications/[id]   電子刊物
+/academy/links            相關連結
+/contact                  聯絡我們 (map, parking info, feedback form)
+/careers                  人才招募
+/privacy, /terms          minimal legal placeholders
+```
+
+## Deployment
+
+Configured for **GitHub Pages** via `.github/workflows/deploy.yml`: every push to `main` runs `npm run build` and publishes `out/`. GitHub Pages is static-only, so `next.config.ts` sets `output: "export"` and uses a custom `image-loader.ts` so `next/image` respects the `/<repo>` basePath.
+
+The workflow sets two build-time values from the repo itself:
+
+- `PAGES_BASE_PATH=/<repo-name>` → `basePath`/`assetPrefix`
+- `SITE_URL=https://<owner>.github.io/<repo-name>` → canonical, Open Graph, sitemap
+
+Locally both are unset, so the site runs at the domain root.
 
 ## Inquiry form
 
-`POST /api/inquiry` validates the payload and forwards it to `INQUIRY_WEBHOOK_URL` (any JSON intake: email relay, CRM, Zapier). Without that variable the endpoint answers 503 and the form shows an honest error with alternatives.
-
-```
-INQUIRY_WEBHOOK_URL=https://example.com/intake
-```
+`components/contact/InquiryForm.tsx` reproduces the existing site's 聯絡我們 fields and validates client-side. It posts to `NEXT_PUBLIC_INQUIRY_ENDPOINT` if set at build time; on GitHub Pages it is unset, so the form says plainly that online submission isn't available and shows phone/email instead. To make it deliver, host on a Node-capable platform, add a route handler at `app/api/inquiry/route.ts` that forwards to your intake (`INQUIRY_WEBHOOK_URL`), and set `NEXT_PUBLIC_INQUIRY_ENDPOINT=/api/inquiry`.
 
 ## Structure
 
 ```
 app/                  routes, metadata, sitemap, robots
 .github/workflows     GitHub Pages deploy workflow
-components/brand      Mark (vector logo)
-components/site       header, footer, smooth scroll, page transition, cursor
-components/home       the homepage chapters (Opening, Manifesto, LandField, ExpertiseSequence, PracticeMap, EvidenceIndex, Record, Philosophy, AcademyIndex, ContactAnchor)
-components/ui         BoundaryLine (signature device), ChapterLabel, PageHead, Reveal
+components/site       header (+dropdowns, search), footer, smooth scroll, page transition
+components/home       HeroBanner, NewsSection, ServicesSection, AcademySection
+components/news       NewsList
+components/services   ServiceCard / ServicesGrid
+components/academy    AcademyNav
+components/ui         SectionTitle, PageTitle, ServiceIcon, Accordion
 components/contact    InquiryForm
-content/              data
+content/              data (see Content)
 lib/                  GSAP registration, media-query hooks, Lenis store
-public/images         supplied photography, illustrations, logo
+public/images         hero, service photos, about/news/academy imagery, brand marks
 ```
 
-## Motion and accessibility
+## Accessibility
 
-- `prefers-reduced-motion` disables Lenis, pinned sequences, the page transition, and the WebGL field (a static SVG composition is shown instead).
-- Pinned chapters (Opening, LandField, ExpertiseSequence) revert their pins in layout-effect cleanup so React can unmount cleanly on navigation.
-- The contextual cursor label appears only on fine-pointer devices and only over `[data-cursor]` elements.
-- Keyboard: the mobile menu traps focus and closes on Escape; the structure map's parcels are focusable buttons.
-
-## Before launch
-
-- Once there's a real production domain, set `site.url` in `content/site.ts` to it (used for canonical URLs, Open Graph, sitemap whenever `SITE_URL` isn't set at build time).
-- Supply verified address, telephone, email, and office hours.
-- Replace the minimal privacy and terms text after legal review.
-- Provide the founder's professional biography and any team members to extend the About page.
-- Add real Academy articles to `content/academy.ts` (slug, title, section, date, author, type).
+- Header dropdowns open on hover and keyboard focus; the mobile menu locks scroll, closes on Escape and returns focus.
+- Academy tabs and the 服務實績 accordion use proper `tab`/`tabpanel` and `button[aria-expanded]` + `region` semantics.
+- `prefers-reduced-motion` disables Lenis and the page transition; the hero carousel never auto-advances under it.
