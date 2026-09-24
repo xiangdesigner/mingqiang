@@ -71,7 +71,7 @@ Configured for **GitHub Pages** via `.github/workflows/deploy.yml`: every push t
 
 The workflow sets two build-time values from the repo itself:
 
-- `PAGES_BASE_PATH=/<repo-name>` → `basePath`/`assetPrefix`
+- `NEXT_PUBLIC_BASE_PATH=/<repo-name>` → `basePath`/`assetPrefix` and the image loader (it must be `NEXT_PUBLIC_` so the loader gets the same value in the browser; images rendered after client-side navigation would otherwise lose the prefix)
 - `SITE_URL=https://<owner>.github.io/<repo-name>` → canonical, Open Graph, sitemap
 
 Locally both are unset, so the site runs at the domain root.

@@ -2,9 +2,11 @@ import type { NextConfig } from "next";
 
 // GitHub Pages serves this as a project page at
 // https://<owner>.github.io/<repo>/ — the deploy workflow sets
-// PAGES_BASE_PATH to "/<repo>" at build time. Local `npm run dev`/`build`
+// NEXT_PUBLIC_BASE_PATH to "/<repo>" at build time. Local `npm run dev`/`build`
 // leave it unset, so the site behaves normally at the domain root.
-const basePath = process.env.PAGES_BASE_PATH || "";
+// It is NEXT_PUBLIC_ (not a private build var) because image-loader.ts must
+// see the same value inside client bundles.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const nextConfig: NextConfig = {
   // GitHub Pages is static hosting only: no Node server, no API routes,
